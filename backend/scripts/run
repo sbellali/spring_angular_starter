@@ -1,0 +1,9 @@
+#!/bin/bash
+
+PID=$(pidof java) && kill -9 $PID
+java -jar /jar/backend-0.0.1-SNAPSHOT.jar &
+while true; do
+    inotifywait -e close_write,modify /jar/backend-0.0.1-SNAPSHOT.jar
+    PID=$(pidof java) && kill -9 $PID
+    java -jar /jar/backend-0.0.1-SNAPSHOT.jar &
+done

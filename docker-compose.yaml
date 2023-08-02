@@ -1,0 +1,68 @@
+version: "3.9"
+services:
+
+  # run services
+  backend:
+    image: ${APP_NAME}/${BACK_IMAGE_NAME}:dev
+    build:
+      context: ./backend
+      target: developement
+    volumes:
+      - ./backend/.jar:/jar
+    ports:
+      - ${BACK_PORT}:8080
+    links:
+      - db
+
+  frontend:
+    image: ${APP_NAME}/${FRONT_IMAGE_NAME}:dev
+    build:
+      context: ./frontend
+      target: developement
+    volumes:
+      - ./frontend:/usr/src/app
+      - ./frontend/node_modules:/usr/src/app/node_modules
+    environment:
+      - FRONT_INTERNAL_PORT=4220
+    ports:
+      - ${FRONT_PORT}:${FRONT_INTERNAL_PORT}
+    links:
+      - backend
+
+  db:
+    image: mysql
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    ports:
+      - ${MYSQL_PORT}:${MYSQL_PORT}
+    volumes:
+      - ./.db/data:/var/lib/mysql
+      - ./db/script:/docker-entrypoint-initdb.d
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: pma
+    links:
+      - db
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: ${MYSQL_PORT}
+      PMA_ARBITRARY: 1
+    restart: always
+    ports:
+      - ${PMA_PORT}:80
+
+  # build and package services
+  backend_package:
+    image: ${APP_NAME}/backend:package
+    build:
+      context: ./backend
+      target: package
+    volumes:
+      - ./backend:/app
+      - ./backend/.jar:/jar
+      - ./backend/.m2:/root/.m2

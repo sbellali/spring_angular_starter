@@ -1,0 +1,13 @@
+#!/bin/bash
+function packageJar() {
+    mvn -f /app/pom.xml package
+    cp /app/target/backend-0.0.1-SNAPSHOT.jar /jar/backend-0.0.1-SNAPSHOT.jar
+}
+
+packageJar &
+
+while true; do
+    inotifywait -r -e close_write,modify /app/src /app/pom.xml
+    for pid in $(ps -ef | awk '/java|cp/ {print $2}'); do kill -9 $pid; done
+    packageJar &
+done
