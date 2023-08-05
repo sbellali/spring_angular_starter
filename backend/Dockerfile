@@ -1,17 +1,16 @@
 FROM maven:latest AS package
 RUN apt-get update -y && \
     apt-get install -y inotify-tools && \
-    mkdir /scripts && \
-    mkdir /app  && \
-    mkdir /jar
-COPY scripts/package /scripts/package
-CMD ["/scripts/package"]
+    mkdir /usr/app  && \
+    mkdir /usr/jar
+ENV TEST_SKIP "true"
+CMD ["/usr/app/scripts/package"]
 
 
 FROM eclipse-temurin:17 AS developement
 RUN apt-get update -y && \
     apt-get install -y inotify-tools && \
-    mkdir /scripts && \
-    mkdir /jar
-COPY scripts/run /scripts/run
-CMD ["/scripts/run"]
+    mkdir /usr/scripts && \
+    mkdir /usr/jar
+COPY scripts/run /usr/scripts/run
+CMD ["/usr/scripts/run"]

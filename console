@@ -29,6 +29,7 @@ function init_backend_project() {
     unzip ./backend/${SBS_API_VAR_name}.zip -d ./backend/
     mv ./backend/${SBS_API_VAR_name}/src ./backend/${SBS_API_VAR_name}/pom.xml ./backend
     rm -rf ./backend/${SBS_API_VAR_name} ./backend/${SBS_API_VAR_name}.zip
+    mkdir ./backend/.m2 ./backend/.jar
 
 }
 

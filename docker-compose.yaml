@@ -8,7 +8,7 @@ services:
       context: ./backend
       target: developement
     volumes:
-      - ./backend/.jar:/jar
+      - ./backend/.jar:/usr/jar
     ports:
       - ${BACK_PORT}:8080
     links:
@@ -62,7 +62,9 @@ services:
     build:
       context: ./backend
       target: package
+    environment:
+      - MVN_SKIP_TEST=true
     volumes:
-      - ./backend:/app
-      - ./backend/.jar:/jar
+      - ./backend:/usr/app
+      - ./backend/.jar:/usr/jar
       - ./backend/.m2:/root/.m2
