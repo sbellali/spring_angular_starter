@@ -1,4 +1,5 @@
 #!/bin/bash
+source .env > /dev/null 2>&1
 
 # Générate Bakend project
 # SBS: Spring Boot Starter
@@ -24,16 +25,19 @@ function init_backend_project() {
        local queryVarname=${varname:12}
        SBS_API_QUERY_STRING="${SBS_API_QUERY_STRING}${queryVarname}=${value// /%20}&"
     done
-    # SBS_API_QUERY_STRING=${SBS_API_QUERY_STRING::-1}
     curl -o ./backend/${SBS_API_VAR_name}.zip $SBS_API_QUERY_STRING
     unzip ./backend/${SBS_API_VAR_name}.zip -d ./backend/
     mv ./backend/${SBS_API_VAR_name}/src ./backend/${SBS_API_VAR_name}/pom.xml ./backend
     rm -rf ./backend/${SBS_API_VAR_name} ./backend/${SBS_API_VAR_name}.zip
     mkdir ./backend/.m2 ./backend/.jar
+    cat > ./backend/src/main/resources/application.properties << EOF
+spring.jpa.database-platform=org.hibernate.dialect.MySQL8Dialect
+spring.jpa.hibernate.ddl-auto=update
+spring.datasource.url=jdbc:mysql://db:3306/$MYSQL_DATABASE
+spring.datasource.username=$MYSQL_USER
+spring.datasource.password=$MYSQL_PASSWORD
+EOF
 
 }
 
 init_backend_project
-
-
-

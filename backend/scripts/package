@@ -1,6 +1,6 @@
 #!/bin/bash
 function packageJar() {
-    mvn -f /usr/app/pom.xml package -Dmaven.test.skip=$MVN_SKIP_TEST
+    mvn -f /usr/app/pom.xml package -Dmaven.repo.local=/usr/.m2 -Dmaven.test.skip=$MVN_SKIP_TEST
     cp /usr/app/target/*.jar /usr/jar/app.jar
 }
 

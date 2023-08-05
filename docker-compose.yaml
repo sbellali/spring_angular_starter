@@ -9,6 +9,7 @@ services:
       target: developement
     volumes:
       - ./backend/.jar:/usr/jar
+    user: $UID:$GID
     ports:
       - ${BACK_PORT}:8080
     links:
@@ -64,7 +65,8 @@ services:
       target: package
     environment:
       - MVN_SKIP_TEST=true
+    user: $UID:$GID
     volumes:
       - ./backend:/usr/app
       - ./backend/.jar:/usr/jar
-      - ./backend/.m2:/root/.m2
+      - ./backend/.m2:/usr/.m2
