@@ -1,0 +1,38 @@
+#!/bin/bash
+
+# Générate Bakend project
+# SBS: Spring Boot Starter
+function init_backend_project() {
+    local SBS_API_QUERY_STRING="https://start.spring.io/starter.zip?"
+
+    local SBS_API_VAR_type="maven-project"
+    local SBS_API_VAR_language="java"
+    local SBS_API_VAR_bootVersion="3.1.2"
+    local SBS_API_VAR_baseDir="demo"
+    local SBS_API_VAR_groupId="com.example"
+    local SBS_API_VAR_artifactId="demo"
+    local SBS_API_VAR_name="demo"
+    local SBS_API_VAR_description="Demo project for Spring Boot"
+    local SBS_API_VAR_packageName="com.example.demo"
+    local SBS_API_VAR_packaging="jar"
+    local SBS_API_VAR_javaVersion="17"
+    local SBS_API_VAR_dependencies="web,data-jpa,mysql"
+
+    for varname in ${!SBS_API_VAR*}
+    do
+       local value=${!varname}
+       local queryVarname=${varname:12}
+       SBS_API_QUERY_STRING="${SBS_API_QUERY_STRING}${queryVarname}=${value// /%20}&"
+    done
+    # SBS_API_QUERY_STRING=${SBS_API_QUERY_STRING::-1}
+    curl -o ./backend/${SBS_API_VAR_name}.zip $SBS_API_QUERY_STRING
+    unzip ./backend/${SBS_API_VAR_name}.zip -d ./backend/
+    mv ./backend/${SBS_API_VAR_name}/src ./backend/${SBS_API_VAR_name}/pom.xml ./backend
+    rm -rf ./backend/${SBS_API_VAR_name} ./backend/${SBS_API_VAR_name}.zip
+
+}
+
+init_backend_project
+
+
+
