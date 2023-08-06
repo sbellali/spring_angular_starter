@@ -21,9 +21,6 @@ function banner() {
     echo "###########################################################################################################"""
 }
 
-
-
-
 function is_valid_string() {
     local string=$1
     local regex="^([A-Za-z]+\.){0,}[A-Za-z]+$"
@@ -34,7 +31,6 @@ function is_valid_string() {
         return 1
     fi
 }
-
 
 function get_boot_version() {
     local PS3='Please choose a spring boot version: '
@@ -66,7 +62,6 @@ function get_java_version() {
         esac
     done
 }
-
 
 function get_group_id() {
     local DEAFULT_GROUP_ID_VALUE="com.example"
@@ -117,7 +112,7 @@ function init_backend_project() {
        local queryVarname=${varname:12}
        SBS_API_QUERY_STRING="${SBS_API_QUERY_STRING}${queryVarname}=${value// /%20}&"
     done
-    echo $SBS_API_QUERY_STRING
+    sed -i "s/JAVA_VERSION_TAG.*$/JAVA_VERSION_TAG=${SBS_API_VAR_javaVersion}/" .env
     curl -o ./backend/${SBS_API_VAR_name}.zip $SBS_API_QUERY_STRING
     unzip ./backend/${SBS_API_VAR_name}.zip -d ./backend/
     mv ./backend/${SBS_API_VAR_name}/src ./backend/${SBS_API_VAR_name}/pom.xml ./backend

@@ -7,6 +7,8 @@ services:
     build:
       context: ./backend
       target: developement
+      args:
+        - JAVA_VERSION_TAG=$JAVA_VERSION_TAG
     volumes:
       - ./backend/.jar:/usr/jar
     user: $UID:$GID
