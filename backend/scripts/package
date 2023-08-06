@@ -7,7 +7,7 @@ function packageJar() {
 packageJar &
 
 while true; do
-    inotifywait -r -e close_write,modify /usr/app/src /usr/app/pom.xml
+    inotifywait -r -e close_write,modify,create /usr/app/src /usr/app/pom.xml
     for pid in $(ps -ef | awk '/java|cp/ {print $2}'); do kill -9 $pid; done
     packageJar &
 done

@@ -5,7 +5,10 @@ function packageJar() {
     java -jar /usr/jar/app.jar
 }
 
-packageJar &
+if [ -e "/usr/jar/app.jar" ]; then
+    packageJar &
+fi
+
 while true; do
     inotifywait -r -e close_write,modify /usr/jar
     packageJar &
