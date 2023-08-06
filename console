@@ -18,7 +18,11 @@ function banner() {
     echo " \     /\  ___/|  |_\  \__(  <_> )  Y Y  \  ___/ "
     echo "  \/\_/  \___  >____/\___  >____/|__|_|  /\___  >"
     echo "             \/          \/            \/     \/ "
+}
+
+function banner_separation() {
     echo "###########################################################################################################"""
+
 }
 
 function is_valid_string() {
@@ -90,6 +94,11 @@ function get_artifact_id() {
 # SBS: Spring Boot Starter
 function init_backend_project() {
     backend_banner
+    if [ -e "./backend/pom.xml" ]; then
+        echo "The project appears to be already initialized; if the issue persists, please re-clone the repository"
+        return 0
+    fi
+
 
     local SBS_API_QUERY_STRING="https://start.spring.io/starter.zip?"
 
@@ -127,5 +136,11 @@ spring.datasource.password=$MYSQL_PASSWORD
 EOF
 }
 
-banner
-init_backend_project
+function main() {
+    banner
+    banner_separation
+    init_backend_project 
+    banner_separation
+}
+
+main
