@@ -1,17 +1,14 @@
+ARG  JAVA_VERSION_TAG=11
 FROM maven:latest AS package
 RUN apt-get update -y && \
     apt-get install -y inotify-tools && \
-    mkdir /scripts && \
-    mkdir /app  && \
-    mkdir /jar
-COPY scripts/package /scripts/package
-CMD ["/scripts/package"]
+    mkdir /usr/app /usr/jar /usr/.m2
+ENV TEST_SKIP "true"
+CMD ["/usr/app/scripts/package"]
 
-
-FROM eclipse-temurin:17 AS developement
+FROM eclipse-temurin:$JAVA_VERSION_TAG AS developement
 RUN apt-get update -y && \
     apt-get install -y inotify-tools && \
-    mkdir /scripts && \
-    mkdir /jar
-COPY scripts/run /scripts/run
-CMD ["/scripts/run"]
+    mkdir /usr/scripts /usr/jar
+COPY scripts/run /usr/scripts/run
+CMD ["/usr/scripts/run"]

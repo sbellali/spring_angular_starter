@@ -7,8 +7,11 @@ services:
     build:
       context: ./backend
       target: developement
+      args:
+        - JAVA_VERSION_TAG=$JAVA_VERSION_TAG
     volumes:
-      - ./backend/.jar:/jar
+      - ./backend/.jar:/usr/jar
+    user: $UID:$GID
     ports:
       - ${BACK_PORT}:8080
     links:
@@ -62,7 +65,10 @@ services:
     build:
       context: ./backend
       target: package
+    environment:
+      - MVN_SKIP_TEST=true
+    user: $UID:$GID
     volumes:
-      - ./backend:/app
-      - ./backend/.jar:/jar
-      - ./backend/.m2:/root/.m2
+      - ./backend:/usr/app
+      - ./backend/.jar:/usr/jar
+      - ./backend/.m2:/usr/.m2
