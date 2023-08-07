@@ -22,6 +22,7 @@ services:
     build:
       context: ./frontend
       target: developement
+    user: $UID:$GID
     volumes:
       - ./frontend:/usr/src/app
       - ./frontend/node_modules:/usr/src/app/node_modules

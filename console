@@ -12,6 +12,15 @@ function backend_banner()
     echo "                                                                         |__/               "
 }
 
+function frontend_banner() {
+    echo "  ___       _ _     _____                _                 _   ____            _           _   "
+    echo " |_ _|_ __ (_) |_  |  ___| __ ___  _ __ | |_ ___ _ __   __| | |  _ \ _ __ ___ (_) ___  ___| |_ "
+    echo "  | || '_ \| | __| | |_ | '__/ _ \| '_ \| __/ _ \ '_ \ / _\` | | |_) | \'__/ _ \| |/ _ \/ __| __|"
+    echo "  | || | | | | |_  |  _|| | | (_) | | | | ||  __/ | | | (_| | |  __/| | | (_) | |  __/ (__| |_ "
+    echo " |___|_| |_|_|\__| |_|  |_|  \___/|_| |_|\__\___|_| |_|\__,_| |_|   |_|  \___// |\___|\___|\__|"
+    echo "                                                                            |__/               "
+}
+
 function banner() {
     echo "    __  _  __ ____ |  |   ____  ____   _____   ____  "
     echo "\ \/ \/ // __ \|  | _/ ___\/  _ \ /     \_/ __ \ "
@@ -136,11 +145,34 @@ spring.datasource.password=$MYSQL_PASSWORD
 EOF
 }
 
+function create_ng_project()
+{
+    docker run -it --rm \
+        -v $(pwd)/frontend:/app \
+        -w /app \
+        -u $(id -u):$(id -g) \
+        sbellali/angular-cli:latest ng new app -g
+    mv ./frontend/app/* ./frontend/app/.vscode ./frontend/app/.editorconfig ./frontend/app/.gitignore ./frontend/
+    rm -fr ./frontend/app
+}
+
+function init_frontend_project() {
+    frontend_banner
+    if [ -e "./frontend/package.json" ]; then
+        echo "The project appears to be already initialized; if the issue persists, please re-clone the repository"
+        return 0
+    fi
+    create_ng_project
+
+
+}
+
 function main() {
     banner
     banner_separation
     init_backend_project 
     banner_separation
+    init_frontend_project
 }
 
 main
