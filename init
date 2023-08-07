@@ -163,6 +163,7 @@ function init_frontend_project() {
         return 0
     fi
     create_ng_project
+    sed -i 's/"start": "ng serve",/"start": "ng serve  --host 0.0.0.0 --port ${FRONT_INTERNAL_PORT}",/' ./frontend/package.json
 
 
 }

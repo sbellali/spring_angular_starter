@@ -8,9 +8,11 @@ services:
       context: ./backend
       target: developement
       args:
-        - JAVA_VERSION_TAG=$JAVA_VERSION_TAG
+        - JAVA_VERSION_TAG
+        - UID
+        - GID
     volumes:
-      - ./backend/.jar:/usr/jar
+      - backend-jar-volume:/usr/jar
     user: $UID:$GID
     ports:
       - ${BACK_PORT}:8080
@@ -27,7 +29,7 @@ services:
       - ./frontend:/usr/src/app
       - ./frontend/node_modules:/usr/src/app/node_modules
     environment:
-      - FRONT_INTERNAL_PORT=4220
+      - FRONT_INTERNAL_PORT
     ports:
       - ${FRONT_PORT}:${FRONT_INTERNAL_PORT}
     links:
@@ -66,10 +68,16 @@ services:
     build:
       context: ./backend
       target: package
+      args:
+        - UID
+        - GID
     environment:
       - MVN_SKIP_TEST=true
     user: $UID:$GID
     volumes:
       - ./backend:/usr/app
-      - ./backend/.jar:/usr/jar
+      - backend-jar-volume:/usr/jar
       - ./backend/.m2:/usr/.m2
+
+volumes:
+  backend-jar-volume:
