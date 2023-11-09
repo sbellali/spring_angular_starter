@@ -8,7 +8,7 @@ Spring boot and angular stack using Docker compose with MySql database
 * docker compose
 
 ## Manual
-The Spring Boot package service is listening for all changes in the source code to compile and package a new JAR.
+I use a devtool spring boot plugin to watch code, compile and run it on save.
 
 All I have to do is code and save my files.
 

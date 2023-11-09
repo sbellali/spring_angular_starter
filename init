@@ -142,7 +142,7 @@ function init_backend_project() {
     local SBS_API_VAR_packageName=${SBS_API_VAR_groupId}.${SBS_API_VAR_artifactId}
     local SBS_API_VAR_packaging="jar"
     local SBS_API_VAR_javaVersion=$(get_java_version)
-    local SBS_API_VAR_dependencies="web,data-jpa,mysql"
+    local SBS_API_VAR_dependencies="web,data-jpa,mysql,devtools"
 
     for varname in ${!SBS_API_VAR*}
     do
@@ -155,7 +155,6 @@ function init_backend_project() {
     unzip ./backend/${SBS_API_VAR_name}.zip -d ./backend/
     mv ./backend/${SBS_API_VAR_name}/src ./backend/${SBS_API_VAR_name}/pom.xml ./backend
     rm -rf ./backend/${SBS_API_VAR_name} ./backend/${SBS_API_VAR_name}.zip
-    mkdir ./backend/.m2 ./backend/.jar
     cat > ./backend/src/main/resources/application.properties << EOF
 spring.jpa.database-platform=org.hibernate.dialect.MySQL8Dialect
 spring.jpa.hibernate.ddl-auto=update
